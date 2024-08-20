@@ -1,16 +1,12 @@
 from flask import *
 import pymysql
 
-import hash_function
+# import hashed_password
 
 app = Flask(__name__)
 
 # Routes Here
-@app.route('/')
-def home():
-     return render_template('home.html')
-
-@app.route('/signup', methods=['POST', 'GET'])
+@app.route('/', methods=['POST', 'GET'])
 def signup():
         #Check if form was posted by user
         #create a function
@@ -22,7 +18,7 @@ def signup():
             password = request.form['password']
             title = request.form['title']
 
-            connection =pymysql.connect(host='localhost',user='root',password='',database='cyberdb')
+            connection =pymysql.connect(host='localhost',user='root',password='',database='md5db')
 
             cursor = connection.cursor()
 
@@ -30,7 +26,7 @@ def signup():
                 insert into users(username,email,password,title)values(%s,%s,%s,%s)
                 '''
             
-            cursor.execute(sql,(username,email,hash_function.hash_password(password),title))
+            cursor.execute(sql,(username,email,password,title))
 
             connection.commit()
             
